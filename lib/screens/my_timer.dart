@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stepwatch_practice/helpers/format_number.dart';
+import 'package:stepwatch_practice/widgets/watch_display.dart';
 
 class MyTimer extends StatefulWidget {
   const MyTimer({super.key});
@@ -50,16 +51,10 @@ class _MyTimerState extends State<MyTimer> {
   Widget build(BuildContext context) {
     return running
         ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
-                children: [
-                  Text(formatNumber(duration.inMinutes)),
-                  Text(':'),
-                  Text(
-                    formatNumber(duration.inSeconds - duration.inMinutes * 60),
-                  ),
-                ],
-              ),
+              WatchDisplay(duration: duration),
+              SizedBox(height: 100),
               CupertinoButton(
                 onPressed: exitTimer,
                 color: Colors.blue,

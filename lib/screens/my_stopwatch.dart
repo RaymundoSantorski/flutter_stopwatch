@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:stepwatch_practice/helpers/format_number.dart';
 import 'package:stepwatch_practice/services/stopwatch_service.dart';
 import 'package:stepwatch_practice/widgets/stopwatch_button.dart';
 import 'package:stepwatch_practice/widgets/stopwatch_controls.dart';
-import 'package:stepwatch_practice/widgets/stopwatch_display.dart';
+import 'package:stepwatch_practice/widgets/watch_display.dart';
 
 class MyStopWatch extends StopwatchService {
   const MyStopWatch({super.key});
@@ -19,7 +18,7 @@ class _MyStopWatchState extends StopwatchServiceState<MyStopWatch> {
       padding: const EdgeInsets.all(10.0),
       child: Column(
         children: [
-          StopwatchDisplay(duration: duration),
+          WatchDisplay(duration: duration),
           duration.inSeconds == 0
               ? StopwatchButton(
                   borderColor: buttonStyle.primary,
