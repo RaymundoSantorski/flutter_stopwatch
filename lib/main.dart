@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -85,6 +84,7 @@ class MyTimer extends StatefulWidget {
 
 class _MyTimerState extends State<MyTimer> {
   Duration duration = Duration(minutes: 0, seconds: 0);
+  bool running = false;
 
   void _setDuration(Duration value) {
     setState(() {
@@ -94,13 +94,47 @@ class _MyTimerState extends State<MyTimer> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CupertinoTimerPicker(
-          onTimerDurationChanged: _setDuration,
-          mode: CupertinoTimerPickerMode.ms,
-        ),
-      ],
-    );
+    return running
+        ? Column(
+            children: [
+              Row(
+                children: [
+                  Text('${duration.inMinutes}'),
+                  Text('${duration.inSeconds - duration.inMinutes * 60}'),
+                ],
+              ),
+              CupertinoButton(
+                onPressed: () {
+                  setState(() {
+                    running = false;
+                  });
+                },
+                child: Text('Detener'),
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              CupertinoTimerPicker(
+                onTimerDurationChanged: _setDuration,
+                mode: CupertinoTimerPickerMode.ms,
+              ),
+              CupertinoButton(
+                onPressed: () {
+                  setState(() {
+                    running = true;
+                  });
+                },
+                color: Colors.blue,
+                child: Text(
+                  'Iniciar',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          );
   }
 }
