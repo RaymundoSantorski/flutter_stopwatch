@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -68,7 +70,9 @@ class MyStopWatch extends StatefulWidget {
 class _MyStopWatchState extends State<MyStopWatch> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Column(children: [
+      ],
+    );
   }
 }
 
@@ -80,8 +84,23 @@ class MyTimer extends StatefulWidget {
 }
 
 class _MyTimerState extends State<MyTimer> {
+  Duration duration = Duration(minutes: 0, seconds: 0);
+
+  void _setDuration(Duration value) {
+    setState(() {
+      duration = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Column(
+      children: [
+        CupertinoTimerPicker(
+          onTimerDurationChanged: _setDuration,
+          mode: CupertinoTimerPickerMode.ms,
+        ),
+      ],
+    );
   }
 }
