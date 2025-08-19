@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:stepwatch_practice/helpers/format_number.dart';
 
 void main() {
   runApp(const MyApp());
@@ -67,9 +68,63 @@ class MyStopWatch extends StatefulWidget {
 }
 
 class _MyStopWatchState extends State<MyStopWatch> {
+  Duration duration = Duration();
+  bool running = false;
+
+  Future<void> stopwatchFunction() async {
+    if (running == false) return;
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      duration = Duration(seconds: duration.inSeconds + 1);
+    });
+    stopwatchFunction();
+  }
+
+  void pauseStopwatch() {
+    setState(() {
+      running = false;
+    });
+  }
+
+  void stopStopwatch() async {
+    running = false;
+    await Future.delayed(Duration(seconds: 1));
+    duration = Duration();
+    setState(() {});
+  }
+
+  void startStopwatch() {
+    setState(() {
+      running = true;
+    });
+    stopwatchFunction();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(formatNumber(duration.inMinutes)),
+            Text(':'),
+            Text(formatNumber(duration.inSeconds - duration.inMinutes * 60)),
+          ],
+        ),
+        duration.inSeconds == 0
+            ? CupertinoButton(onPressed: startStopwatch, child: Text('Iniciar'))
+            : Row(
+                children: [
+                  CupertinoButton(
+                    onPressed: pauseStopwatch,
+                    child: Text('Pausar'),
+                  ),
+                  CupertinoButton(
+                    onPressed: stopStopwatch,
+                    child: Text('Reiniciar'),
+                  ),
+                ],
+              ),
       ],
     );
   }
@@ -109,13 +164,6 @@ class _MyTimerState extends State<MyTimer> {
     setState(() {
       duration = value;
     });
-  }
-
-  String formatNumber(int value) {
-    if (value >= 10) {
-      return '$value';
-    }
-    return '0$value';
   }
 
   @override
