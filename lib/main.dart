@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -86,10 +88,29 @@ class _MyTimerState extends State<MyTimer> {
   Duration duration = Duration(minutes: 0, seconds: 0);
   bool running = false;
 
+  Future<void> timerFunction() async {
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      duration = Duration(seconds: duration.inSeconds - 1);
+    });
+    if (duration.inSeconds >= 0) {
+      timerFunction();
+    } else {
+      running = false;
+    }
+  }
+
   void _setDuration(Duration value) {
     setState(() {
       duration = value;
     });
+  }
+
+  String formatNumber(int value) {
+    if (value >= 10) {
+      return '$value';
+    }
+    return '0$value';
   }
 
   @override
@@ -99,8 +120,11 @@ class _MyTimerState extends State<MyTimer> {
             children: [
               Row(
                 children: [
-                  Text('${duration.inMinutes}'),
-                  Text('${duration.inSeconds - duration.inMinutes * 60}'),
+                  Text(formatNumber(duration.inMinutes)),
+                  Text(':'),
+                  Text(
+                    formatNumber(duration.inSeconds - duration.inMinutes * 60),
+                  ),
                 ],
               ),
               CupertinoButton(
@@ -109,7 +133,14 @@ class _MyTimerState extends State<MyTimer> {
                     running = false;
                   });
                 },
-                child: Text('Detener'),
+                color: Colors.blue,
+                child: Text(
+                  'Detener',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ],
           )
@@ -124,6 +155,7 @@ class _MyTimerState extends State<MyTimer> {
                   setState(() {
                     running = true;
                   });
+                  timerFunction();
                 },
                 color: Colors.blue,
                 child: Text(
