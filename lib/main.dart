@@ -80,31 +80,51 @@ class _MyStopWatchState extends State<MyStopWatch> {
     stopwatchFunction();
   }
 
-  void pauseStopwatch() {
+  Future<void> pauseStopwatch() async {
     setState(() {
       running = false;
     });
   }
 
-  void stopStopwatch() async {
+  Future<void> stopStopwatch() async {
     running = false;
     await Future.delayed(Duration(seconds: 1));
     duration = Duration();
     setState(() {});
   }
 
-  void startStopwatch() {
+  Future<void> restartStopWatch() async {
+    await pauseStopwatch();
+    await Future.delayed(Duration(seconds: 1));
+    await stopStopwatch();
+    startStopwatch();
+  }
+
+  Future<void> startStopwatch() async {
     setState(() {
       running = true;
     });
     stopwatchFunction();
   }
 
+  ColorScheme buttonStyle = ColorScheme(
+    brightness: Brightness.light,
+    primary: Colors.blue,
+    onPrimary: Colors.white,
+    secondary: Colors.white,
+    onSecondary: Colors.blue,
+    error: Colors.redAccent,
+    onError: Colors.black,
+    surface: Colors.grey,
+    onSurface: Colors.white,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(formatNumber(duration.inMinutes)),
             Text(':'),
@@ -112,16 +132,90 @@ class _MyStopWatchState extends State<MyStopWatch> {
           ],
         ),
         duration.inSeconds == 0
-            ? CupertinoButton(onPressed: startStopwatch, child: Text('Iniciar'))
+            ? CupertinoButton(
+                color: buttonStyle.primary,
+                onPressed: startStopwatch,
+                child: Text(
+                  'Iniciar',
+                  style: TextStyle(color: buttonStyle.onPrimary),
+                ),
+              )
             : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CupertinoButton(
-                    onPressed: pauseStopwatch,
-                    child: Text('Pausar'),
+                  running
+                      ? Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: buttonStyle.primary,
+                              width: 3.0,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            color: buttonStyle.primary,
+                          ),
+                          child: CupertinoButton(
+                            color: buttonStyle.primary,
+                            onPressed: pauseStopwatch,
+                            child: Text(
+                              '   Pausar  ',
+                              style: TextStyle(color: buttonStyle.onPrimary),
+                            ),
+                          ),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: buttonStyle.primary,
+                              width: 3.0,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            color: buttonStyle.primary,
+                          ),
+                          child: CupertinoButton(
+                            color: buttonStyle.primary,
+                            onPressed: startStopwatch,
+                            child: Text(
+                              'Continuar',
+                              style: TextStyle(color: buttonStyle.onPrimary),
+                            ),
+                          ),
+                        ),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: buttonStyle.onSecondary,
+                        width: 3.0,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    ),
+                    child: CupertinoButton(
+                      onPressed: () {
+                        stopStopwatch();
+                        startStopwatch();
+                      },
+                      child: Text(
+                        'Reiniciar',
+                        style: TextStyle(color: buttonStyle.onSecondary),
+                      ),
+                    ),
                   ),
-                  CupertinoButton(
-                    onPressed: stopStopwatch,
-                    child: Text('Reiniciar'),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: buttonStyle.error, width: 3.0),
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      color: buttonStyle.onPrimary,
+                    ),
+                    child: CupertinoButton(
+                      onPressed: stopStopwatch,
+                      child: Text(
+                        'Detener',
+                        style: TextStyle(color: buttonStyle.error),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -151,6 +245,14 @@ class _MyTimerState extends State<MyTimer> {
     } else {
       exitTimer();
     }
+  }
+
+  void startTimer() {
+    if (duration.inSeconds == 0) return;
+    setState(() {
+      running = true;
+    });
+    timerFunction();
   }
 
   void exitTimer() {
@@ -200,12 +302,7 @@ class _MyTimerState extends State<MyTimer> {
                 mode: CupertinoTimerPickerMode.ms,
               ),
               CupertinoButton(
-                onPressed: () {
-                  setState(() {
-                    running = true;
-                  });
-                  timerFunction();
-                },
+                onPressed: duration.inSeconds > 0 ? startTimer : null,
                 color: Colors.blue,
                 child: Text(
                   'Iniciar',
