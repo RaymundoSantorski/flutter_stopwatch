@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -96,8 +94,15 @@ class _MyTimerState extends State<MyTimer> {
     if (duration.inSeconds >= 0) {
       timerFunction();
     } else {
-      running = false;
+      exitTimer();
     }
+  }
+
+  void exitTimer() {
+    setState(() {
+      duration = Duration();
+      running = false;
+    });
   }
 
   void _setDuration(Duration value) {
@@ -128,11 +133,7 @@ class _MyTimerState extends State<MyTimer> {
                 ],
               ),
               CupertinoButton(
-                onPressed: () {
-                  setState(() {
-                    running = false;
-                  });
-                },
+                onPressed: exitTimer,
                 color: Colors.blue,
                 child: Text(
                   'Detener',
