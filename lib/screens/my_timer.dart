@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stepwatch_practice/helpers/format_number.dart';
-import 'package:stepwatch_practice/widgets/watch_display.dart';
+import 'package:stepwatch_practice/widgets/timer/timer_display.dart';
+import 'package:stepwatch_practice/widgets/timer/timer_picker.dart';
 
 class MyTimer extends StatefulWidget {
   const MyTimer({super.key});
@@ -41,7 +41,7 @@ class _MyTimerState extends State<MyTimer> {
     });
   }
 
-  void _setDuration(Duration value) {
+  void setDuration(Duration value) {
     setState(() {
       duration = value;
     });
@@ -50,44 +50,11 @@ class _MyTimerState extends State<MyTimer> {
   @override
   Widget build(BuildContext context) {
     return running
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              WatchDisplay(duration: duration),
-              SizedBox(height: 100),
-              CupertinoButton(
-                onPressed: exitTimer,
-                color: Colors.blue,
-                child: Text(
-                  'Detener',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          )
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CupertinoTimerPicker(
-                onTimerDurationChanged: _setDuration,
-                mode: CupertinoTimerPickerMode.ms,
-              ),
-              SizedBox(height: 100),
-              CupertinoButton(
-                onPressed: duration.inSeconds > 0 ? startTimer : null,
-                color: Colors.blue,
-                child: Text(
-                  'Iniciar',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
+        ? TimerDisplay(duration: duration, exitTimer: exitTimer)
+        : TimerPicker(
+            duration: duration,
+            setDuration: setDuration,
+            startTimer: startTimer,
           );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stepwatch_practice/widgets/stopwatch_button.dart';
+import 'package:stepwatch_practice/widgets/stopwatch/stopwatch_button.dart';
 
 class StopwatchControls extends StatelessWidget {
   const StopwatchControls({

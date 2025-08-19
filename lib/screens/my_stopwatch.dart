@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:stepwatch_practice/services/stopwatch_service.dart';
-import 'package:stepwatch_practice/widgets/stopwatch_button.dart';
-import 'package:stepwatch_practice/widgets/stopwatch_controls.dart';
+import 'package:stepwatch_practice/widgets/stopwatch/stopwatch_button.dart';
+import 'package:stepwatch_practice/widgets/stopwatch/stopwatch_controls.dart';
 import 'package:stepwatch_practice/widgets/watch_display.dart';
 
 class MyStopWatch extends StopwatchService {
