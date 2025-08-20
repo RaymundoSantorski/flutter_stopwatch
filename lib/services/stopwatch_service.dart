@@ -14,23 +14,29 @@ class StopwatchServiceState<T extends StopwatchService> extends State<T> {
   Future<void> stopwatchFunction() async {
     if (running == false) return;
     await Future.delayed(Duration(seconds: 1));
-    setState(() {
-      duration = Duration(seconds: duration.inSeconds + 1);
-    });
+    if (mounted) {
+      setState(() {
+        duration = Duration(seconds: duration.inSeconds + 1);
+      });
+    }
     stopwatchFunction();
   }
 
   Future<void> pauseStopwatch() async {
-    setState(() {
-      running = false;
-    });
+    if (mounted) {
+      setState(() {
+        running = false;
+      });
+    }
   }
 
   Future<void> stopStopwatch() async {
     running = false;
     await Future.delayed(Duration(seconds: 1));
     duration = Duration();
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<void> restartStopWatch() async {
@@ -40,9 +46,11 @@ class StopwatchServiceState<T extends StopwatchService> extends State<T> {
   }
 
   Future<void> startStopwatch() async {
-    setState(() {
-      running = true;
-    });
+    if (mounted) {
+      setState(() {
+        running = true;
+      });
+    }
     stopwatchFunction();
   }
 
