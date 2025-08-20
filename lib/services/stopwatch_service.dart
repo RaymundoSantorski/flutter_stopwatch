@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class StopwatchService extends StatefulWidget {
@@ -10,48 +11,55 @@ class StopwatchService extends StatefulWidget {
 class StopwatchServiceState<T extends StopwatchService> extends State<T> {
   Duration duration = Duration();
   bool running = false;
+  bool showControls = false;
+  static Timer? _timer;
 
-  Future<void> stopwatchFunction() async {
-    if (running == false) return;
-    await Future.delayed(Duration(seconds: 1));
-    if (mounted) {
+  void start() {
+    if (running) return;
+    running = true;
+    setControls(true);
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
         duration = Duration(seconds: duration.inSeconds + 1);
       });
-    }
-    stopwatchFunction();
+    });
   }
 
-  Future<void> pauseStopwatch() async {
-    if (mounted) {
-      setState(() {
-        running = false;
-      });
-    }
+  void stopStopwatch() async {
+    resetStopwatch();
+    setControls(false);
+    setRunning(false);
+    _timer?.cancel();
   }
 
-  Future<void> stopStopwatch() async {
-    running = false;
-    await Future.delayed(Duration(seconds: 1));
-    duration = Duration();
-    if (mounted) {
-      setState(() {});
-    }
+  void pauseStopwatch() {
+    setRunning(false);
+    _timer?.cancel();
   }
 
-  Future<void> restartStopWatch() async {
-    await pauseStopwatch();
-    await stopStopwatch();
-    startStopwatch();
+  void restartStopWatch() {
+    _timer?.cancel();
+    resetStopwatch();
+    start();
   }
 
-  Future<void> startStopwatch() async {
-    if (mounted) {
-      setState(() {
-        running = true;
-      });
-    }
-    stopwatchFunction();
+  void resetStopwatch() {
+    setState(() {
+      setRunning(false);
+      duration = Duration();
+    });
+  }
+
+  void setRunning(bool value) {
+    setState(() {
+      running = value;
+    });
+  }
+
+  void setControls(bool value) {
+    setState(() {
+      showControls = value;
+    });
   }
 
   ColorScheme buttonStyle = ColorScheme(
@@ -65,6 +73,12 @@ class StopwatchServiceState<T extends StopwatchService> extends State<T> {
     surface: Colors.grey,
     onSurface: Colors.white,
   );
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

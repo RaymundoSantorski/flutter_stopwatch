@@ -19,11 +19,11 @@ class _MyStopWatchState extends StopwatchServiceState<MyStopWatch> {
       child: Column(
         children: [
           WatchDisplay(duration: duration),
-          duration.inSeconds == 0
+          !showControls
               ? StopwatchButton(
                   borderColor: buttonStyle.primary,
                   color: buttonStyle.primary,
-                  onPressed: startStopwatch,
+                  onPressed: start,
                   textColor: buttonStyle.onPrimary,
                   label: 'Iniciar',
                 )
@@ -31,7 +31,7 @@ class _MyStopWatchState extends StopwatchServiceState<MyStopWatch> {
                   style: buttonStyle,
                   isRunning: running,
                   pauseStopwatch: pauseStopwatch,
-                  startStopwatch: startStopwatch,
+                  startStopwatch: start,
                   restartStopWatch: restartStopWatch,
                   stopStopwatch: stopStopwatch,
                 ),

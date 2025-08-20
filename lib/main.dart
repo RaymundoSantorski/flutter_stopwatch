@@ -26,6 +26,7 @@ Future<void> main() async {
     onDidReceiveNotificationResponse:
         (NotificationResponse notificationResponse) {
           // Lógica para manejar la notificación en primer plano
+          print(notificationResponse.payload);
         },
     // 2. Pasar la referencia a la función top-level.
     onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
