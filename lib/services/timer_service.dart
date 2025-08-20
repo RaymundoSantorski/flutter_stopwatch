@@ -12,6 +12,8 @@ class TimerService extends StatefulWidget {
 
 class TimerServiceState<T extends TimerService> extends State<T> {
   Duration duration = Duration(minutes: 0, seconds: 0);
+  late Duration initialDuration;
+  bool unmounted = false;
   bool running = false;
 
   Future<void> timerFunction() async {
@@ -24,7 +26,7 @@ class TimerServiceState<T extends TimerService> extends State<T> {
     if (duration.inSeconds >= 0) {
       timerFunction();
     } else {
-      await notify();
+      if (!unmounted) await notify();
       exitTimer();
     }
   }
@@ -55,6 +57,8 @@ class TimerServiceState<T extends TimerService> extends State<T> {
     if (duration.inSeconds == 0) return;
     if (mounted) {
       setState(() {
+        unmounted = false;
+        initialDuration = duration;
         running = true;
       });
     }
@@ -64,6 +68,7 @@ class TimerServiceState<T extends TimerService> extends State<T> {
   void exitTimer() {
     if (mounted) {
       setState(() {
+        unmounted = true;
         duration = Duration();
         running = false;
       });
