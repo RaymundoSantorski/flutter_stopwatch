@@ -12,7 +12,7 @@ class StopwatchServiceState<T extends StopwatchService> extends State<T> {
   Duration duration = Duration();
   bool running = false;
   bool showControls = false;
-  static Timer? _timer;
+  Timer? _timer;
 
   void start() {
     if (running) return;

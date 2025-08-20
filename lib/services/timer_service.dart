@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -13,25 +15,37 @@ class TimerService extends StatefulWidget {
 class TimerServiceState<T extends TimerService> extends State<T> {
   Duration duration = Duration(minutes: 0, seconds: 0);
   late Duration initialDuration;
-  bool unmounted = false;
   bool running = false;
+  Timer? _timer;
 
-  Future<void> timerFunction() async {
-    await Future.delayed(Duration(seconds: 1));
-    if (mounted) {
+  void startTimer() {
+    if (running) return;
+    setRunning(true);
+    setInitialDuration();
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (duration.inSeconds <= 0) {
+        notify();
+        exitTimer();
+      }
       setState(() {
         duration = Duration(seconds: duration.inSeconds - 1);
       });
-    }
-    if (duration.inSeconds >= 0) {
-      timerFunction();
-    } else {
-      if (!unmounted) await notify();
-      exitTimer();
-    }
+    });
   }
 
-  Future<void> notify() async {
+  void setRunning(bool value) {
+    setState(() {
+      running = value;
+    });
+  }
+
+  void setInitialDuration() {
+    setState(() {
+      initialDuration = duration;
+    });
+  }
+
+  void notify() {
     FlutterRingtonePlayer().playAlarm();
     showNotification();
   }
@@ -53,34 +67,24 @@ class TimerServiceState<T extends TimerService> extends State<T> {
     );
   }
 
-  void startTimer() {
-    if (duration.inSeconds == 0) return;
-    if (mounted) {
-      setState(() {
-        unmounted = false;
-        initialDuration = duration;
-        running = true;
-      });
-    }
-    timerFunction();
-  }
-
   void exitTimer() {
-    if (mounted) {
-      setState(() {
-        unmounted = true;
-        duration = Duration();
-        running = false;
-      });
-    }
+    _timer?.cancel();
+    setState(() {
+      duration = Duration();
+      running = false;
+    });
   }
 
   void setDuration(Duration value) {
-    if (mounted) {
-      setState(() {
-        duration = value;
-      });
-    }
+    setState(() {
+      duration = value;
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
