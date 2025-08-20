@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
 class TimerService extends StatefulWidget {
   const TimerService({super.key});
@@ -21,8 +22,13 @@ class TimerServiceState<T extends TimerService> extends State<T> {
     if (duration.inSeconds >= 0) {
       timerFunction();
     } else {
+      await notify();
       exitTimer();
     }
+  }
+
+  Future<void> notify() async {
+    FlutterRingtonePlayer().playAlarm();
   }
 
   void startTimer() {
