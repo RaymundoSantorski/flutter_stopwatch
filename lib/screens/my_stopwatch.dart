@@ -17,8 +17,10 @@ class _MyStopWatchState extends StopwatchServiceState<MyStopWatch> {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           WatchDisplay(duration: duration),
+          SizedBox(height: 100),
           !showControls
               ? StopwatchButton(
                   borderColor: buttonStyle.primary,
