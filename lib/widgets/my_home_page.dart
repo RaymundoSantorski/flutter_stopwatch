@@ -21,11 +21,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     String title = _index == 0 ? 'Stopwatch' : 'Timer';
+    Color color = _index == 0 ? Colors.pinkAccent : Colors.blue;
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(
+        title: Text(
+          title,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: color,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         onTap: setIndex,
+        selectedItemColor: color,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.watch_rounded),
