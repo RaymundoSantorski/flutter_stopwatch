@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:stepwatch_practice/services/stopwatch_service.dart';
 import 'package:stepwatch_practice/widgets/stopwatch/stopwatch_button.dart';
 import 'package:stepwatch_practice/widgets/stopwatch/stopwatch_controls.dart';

@@ -64,10 +64,10 @@ class StopwatchServiceState<T extends StopwatchService> extends State<T> {
 
   ColorScheme buttonStyle = ColorScheme(
     brightness: Brightness.light,
-    primary: Colors.blue,
+    primary: Colors.pinkAccent,
     onPrimary: Colors.white,
     secondary: Colors.white,
-    onSecondary: Colors.blue,
+    onSecondary: Colors.pinkAccent,
     error: Colors.redAccent,
     onError: Colors.black,
     surface: Colors.grey,
