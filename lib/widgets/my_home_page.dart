@@ -12,7 +12,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _index = 0;
 
-  void setIndex(value) {
+  void setIndex(int value) {
     setState(() {
       _index = value;
     });

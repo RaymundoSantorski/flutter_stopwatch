@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import workmanager_apple
 import flutter_local_notifications
 
 @main
@@ -15,8 +16,12 @@ import flutter_local_notifications
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
     }
+    WorkmanagerPlugin.setPluginRegistrantCallback {(registry) in 
+      GeneratedPluginRegistrant.register(with: registry)
+    }
 
     GeneratedPluginRegistrant.register(with: self)
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
