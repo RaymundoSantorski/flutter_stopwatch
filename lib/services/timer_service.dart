@@ -1,9 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:stepwatch_practice/main.dart';
+import 'package:workmanager/workmanager.dart';
 
 class TimerService extends StatefulWidget {
   const TimerService({super.key});
@@ -13,6 +10,7 @@ class TimerService extends StatefulWidget {
 }
 
 class TimerServiceState<T extends TimerService> extends State<T> {
+  static bool workmanagerInitialized = false;
   Duration duration = Duration(minutes: 0, seconds: 0);
   late Duration initialDuration;
   bool running = false;
@@ -45,25 +43,11 @@ class TimerServiceState<T extends TimerService> extends State<T> {
     });
   }
 
-  void notify() {
-    FlutterRingtonePlayer().playAlarm();
-    showNotification();
-  }
-
-  Future<void> showNotification() async {
-    const DarwinNotificationDetails iosPlatformChannelSpecifics =
-        DarwinNotificationDetails();
-
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      iOS: iosPlatformChannelSpecifics,
-    );
-
-    await flutterLocalNotificationsPlugin.show(
-      0, // ID único de la notificación
-      'Temporizador',
-      '¡Tu temporizador terminó!',
-      platformChannelSpecifics,
-      payload: 'Datos personalizados',
+  void notify() async {
+    Workmanager().registerOneOffTask(
+      'showNotification',
+      'showNotification',
+      initialDelay: Duration(seconds: duration.inSeconds),
     );
   }
 
