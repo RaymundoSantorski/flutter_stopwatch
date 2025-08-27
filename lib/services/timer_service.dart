@@ -22,7 +22,7 @@ class TimerServiceState<T extends TimerService> extends State<T> {
     setInitialDuration();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (duration.inSeconds <= 0) {
-        notify();
+        showNotification();
         exitTimer();
       }
       setState(() {
@@ -43,7 +43,7 @@ class TimerServiceState<T extends TimerService> extends State<T> {
     });
   }
 
-  void notify() async {
+  void showNotification() async {
     Workmanager().registerOneOffTask(
       'showNotification',
       'showNotification',
@@ -53,6 +53,7 @@ class TimerServiceState<T extends TimerService> extends State<T> {
 
   void exitTimer() {
     _timer?.cancel();
+    Workmanager().cancelByUniqueName('showNotification');
     setState(() {
       duration = Duration();
       running = false;
