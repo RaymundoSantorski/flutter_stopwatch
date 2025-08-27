@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StopwatchService extends StatefulWidget {
   const StopwatchService({super.key});
@@ -14,13 +15,17 @@ class StopwatchServiceState<T extends StopwatchService> extends State<T> {
   bool showControls = false;
   Timer? _timer;
 
-  void start() {
+  Future<void> start() async {
     if (running) return;
     running = true;
     setControls(true);
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    prefs.setInt('initDate', DateTime.now().millisecondsSinceEpoch);
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) async {
+      int initDate = await prefs.getInt('initDate') ?? 0;
       setState(() {
-        duration = Duration(seconds: duration.inSeconds + 1);
+        int miliseconds = (DateTime.now().millisecondsSinceEpoch - initDate);
+        duration = Duration(milliseconds: miliseconds);
       });
     });
   }
