@@ -19,6 +19,7 @@ import flutter_local_notifications
     WorkmanagerPlugin.setPluginRegistrantCallback {(registry) in 
       GeneratedPluginRegistrant.register(with: registry)
     }
+    // WorkmanagerPlugin.registerBackgroundTask(withIdentifier: "showNotification")
 
     GeneratedPluginRegistrant.register(with: self)
 
